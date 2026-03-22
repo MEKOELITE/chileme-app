@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Warm yellow-orange to match launcher artwork edges under adaptive icon mask -->
+    <color name="ic_launcher_background">#FFB84D</color>
+</resources>

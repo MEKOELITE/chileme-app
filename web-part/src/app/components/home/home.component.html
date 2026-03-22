@@ -1,0 +1,118 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow-sm">
+    <div class="max-w-md mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-gray-800">吃了么</h1>
+      <nav class="flex gap-4">
+        <a routerLink="/history" class="text-gray-600 hover:text-gray-900">历史</a>
+        <a routerLink="/settings" class="text-gray-600 hover:text-gray-900">设置</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-md mx-auto px-4 py-6">
+    <!-- 餐食类型选择 -->
+    <div class="mb-6">
+      <h2 class="text-sm font-medium text-gray-500 mb-3">选择餐食类型</h2>
+      <div class="flex gap-2">
+        @for (type of ['breakfast', 'lunch', 'dinner', 'snack']; track type) {
+          <button
+            (click)="selectMealType($any(type))"
+            [class.bg-blue-500]="selectedMealType() === type"
+            [class.text-white]="selectedMealType() === type"
+            [class.bg-gray-200]="selectedMealType() !== type"
+            [class.text-gray-700]="selectedMealType() !== type"
+            class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors"
+          >
+            {{ getMealTypeName($any(type)) }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- 健康偏好 -->
+    <div class="mb-6">
+      <label class="flex items-center gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          [checked]="preferHealthy()"
+          (change)="preferHealthy.set($any($event.target).checked)"
+          class="w-5 h-5 text-blue-500 rounded focus:ring-blue-500"
+        />
+        <span class="text-gray-700">想要健康清淡</span>
+      </label>
+    </div>
+
+    <!-- 随机推荐 -->
+    <div class="mb-6">
+      <h2 class="text-sm font-medium text-gray-500 mb-3">随机推荐</h2>
+      <div class="bg-white rounded-xl shadow-sm p-4 mb-3">
+        @if (randomFood()) {
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-2xl font-bold text-gray-800">{{ randomFood()?.name }}</p>
+              <p class="text-sm text-gray-500">{{ randomFood()?.tag }}</p>
+            </div>
+            <span
+              class="px-2 py-1 text-xs rounded-full"
+              [class.bg-green-100]="randomFood()?.isHealthy"
+              [class.text-green-700]="randomFood()?.isHealthy"
+              [class.bg-red-100]="!randomFood()?.isHealthy"
+              [class.text-red-700]="!randomFood()?.isHealthy"
+            >
+              {{ randomFood()?.isHealthy ? '健康' : '放纵' }}
+            </span>
+          </div>
+        }
+      </div>
+      <button
+        (click)="randomPick()"
+        class="w-full py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+      >
+        换一个
+      </button>
+    </div>
+
+    <!-- AI 推荐 -->
+    <div class="mb-6">
+      <h2 class="text-sm font-medium text-gray-500 mb-3">AI 智能推荐</h2>
+      <button
+        (click)="aiRecommend()"
+        [disabled]="isLoading()"
+        class="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+      >
+        @if (isLoading()) {
+          <span>AI 思考中...</span>
+        } @else {
+          <span>让 AI 推荐</span>
+        }
+      </button>
+
+      @if (aiRecommendation()) {
+        <div class="mt-3 bg-white rounded-xl shadow-sm p-4">
+          <p class="text-lg font-semibold text-gray-800">{{ aiRecommendation()?.food }}</p>
+          <p class="text-sm text-gray-500 mt-1">{{ aiRecommendation()?.reason }}</p>
+        </div>
+      }
+    </div>
+
+    <!-- 确认选择 -->
+    <div class="mb-6">
+      <h2 class="text-sm font-medium text-gray-500 mb-3">确认选择</h2>
+      <input
+        type="text"
+        [value]="selectedFood()"
+        (input)="selectedFood.set($any($event.target).value)"
+        placeholder="输入或选择食物"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      />
+      <button
+        (click)="confirmSelection()"
+        [disabled]="!selectedFood()"
+        class="w-full mt-3 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        确认今天吃这个！
+      </button>
+    </div>
+  </main>
+</div>

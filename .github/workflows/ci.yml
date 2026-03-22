@@ -18,30 +18,25 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
-        cache-dependency-path: chileme-app/web-part/package-lock.json
+        cache-dependency-path: web-part/package-lock.json
 
     - name: Install dependencies
       run: |
-        cd chileme-app/web-part
+        cd web-part
         npm ci
-
-    - name: Lint
-      run: |
-        cd chileme-app/web-part
-        npm run lint || true
-
-    - name: Run tests
-      run: |
-        cd chileme-app/web-part
-        npm test -- --run
 
     - name: Build
       run: |
-        cd chileme-app/web-part
+        cd web-part
         npm run build
+
+    - name: Run tests
+      run: |
+        cd web-part
+        npm test -- --run
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: dist
-        path: chileme-app/web-part/dist/
+        path: web-part/dist/

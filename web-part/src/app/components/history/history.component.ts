@@ -4,6 +4,15 @@ import { RouterLink } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import { FoodHistory, MealType } from '../../models/food.model';
 
+/**
+ * 餐食类型配置
+ */
+interface MealTypeConfig {
+  value: MealType;
+  label: string;
+  emoji: string;
+}
+
 @Component({
   selector: 'app-history',
   standalone: true,
@@ -13,6 +22,14 @@ import { FoodHistory, MealType } from '../../models/food.model';
 })
 export class HistoryComponent implements OnInit {
   private storageService = inject(StorageService);
+
+  // 餐食类型配置
+  mealTypes: MealTypeConfig[] = [
+    { value: 'breakfast', label: '早餐', emoji: '🌅' },
+    { value: 'lunch', label: '午餐', emoji: '☀️' },
+    { value: 'dinner', label: '晚餐', emoji: '🌙' },
+    { value: 'snack', label: '夜宵', emoji: '🍜' },
+  ];
 
   private history = signal<FoodHistory[]>([]);
 
@@ -52,6 +69,11 @@ export class HistoryComponent implements OnInit {
   ngOnInit(): void {
     const allHistory = this.storageService.getFoodHistory();
     this.history.set(allHistory);
+  }
+
+  getMealEmoji(type: MealType): string {
+    const config = this.mealTypes.find(m => m.value === type);
+    return config?.emoji || '🍽️';
   }
 
   getMealTypeName(type: MealType): string {

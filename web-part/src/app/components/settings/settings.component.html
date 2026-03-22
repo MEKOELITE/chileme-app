@@ -1,135 +1,237 @@
-<div class="min-h-screen bg-gray-50">
-  <!-- Header -->
-  <header class="bg-white shadow-sm">
-    <div class="max-w-md mx-auto px-4 py-4 flex items-center">
-      <a routerLink="/" class="text-gray-600 hover:text-gray-900 mr-4">
-        ← 返回
+<!-- 设置页面 -->
+<div class="app-container">
+  <!-- 顶部导航 -->
+  <header class="app-header">
+    <div class="header-content">
+      <a routerLink="/" class="back-btn">
+        <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <polyline points="15,18 9,12 15,6"/>
+        </svg>
+        <span class="header-title">设置</span>
       </a>
-      <h1 class="text-xl font-bold text-gray-800">设置</h1>
     </div>
   </header>
 
-  <main class="max-w-md mx-auto px-4 py-6">
+  <!-- 主内容 -->
+  <main class="main-content">
     <!-- API Key 设置 -->
-    <section class="mb-8">
-      <h2 class="text-lg font-semibold text-gray-800 mb-4">MiniMax API Key</h2>
-      <div class="bg-white rounded-xl shadow-sm p-4">
-        <p class="text-sm text-gray-500 mb-3">
-          请输入您的 MiniMax API Key。Key 不会被上传，仅保存在本地浏览器中。
-        </p>
-        <input
-          type="password"
-          [(ngModel)]="apiKeyValue"
-          placeholder="输入 API Key"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
-        />
+    <section class="settings-section">
+      <div class="section-header">
+        <div class="section-icon-wrapper">
+          <span class="section-icon">🔑</span>
+        </div>
+        <div class="section-text">
+          <h2 class="section-title">MiniMax API Key</h2>
+          <p class="section-desc">用于启用 AI 智能推荐功能</p>
+        </div>
+      </div>
+      <div class="settings-card">
+        <div class="input-group">
+          <label class="input-label">API Key</label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              [(ngModel)]="apiKeyValue"
+              placeholder="输入您的 API Key"
+              class="text-input"
+            />
+          </div>
+        </div>
 
         @if (validationResult()) {
-          <p
-            class="text-sm mb-3"
-            [class.text-green-600]="validationResult()?.valid"
-            [class.text-red-600]="!validationResult()?.valid"
-          >
-            {{ validationResult()?.message }}
-          </p>
+          <div class="validation-message" [class.success]="validationResult()?.valid" [class.error]="!validationResult()?.valid">
+            <svg class="validation-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              @if (validationResult()?.valid) {
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              } @else {
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              }
+            </svg>
+            <span>{{ validationResult()?.message }}</span>
+          </div>
         }
 
         <button
           (click)="validateApiKey()"
           [disabled]="isValidating()"
-          class="w-full py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors disabled:opacity-50"
+          class="primary-btn"
         >
           @if (isValidating()) {
-            验证中...
+            <div class="loading-spinner">
+              <span></span><span></span><span></span>
+            </div>
+            <span>验证中</span>
           } @else {
-            验证并保存
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span>验证并保存</span>
           }
         </button>
       </div>
     </section>
 
-    <!-- 标签管理 -->
-    <section class="mb-8">
-      <h2 class="text-lg font-semibold text-gray-800 mb-4">自定义标签</h2>
+    <!-- 自定义标签 -->
+    <section class="settings-section">
+      <div class="section-header">
+        <div class="section-icon-wrapper">
+          <span class="section-icon">🏷️</span>
+        </div>
+        <div class="section-text">
+          <h2 class="section-title">自定义标签</h2>
+          <p class="section-desc">添加你喜欢的食物类别</p>
+        </div>
+      </div>
 
-      <!-- 添加新标签 -->
-      <div class="bg-white rounded-xl shadow-sm p-4 mb-4">
-        <h3 class="text-sm font-medium text-gray-600 mb-3">添加新标签</h3>
+      <!-- 添加新标签卡片 -->
+      <div class="settings-card add-tag-card">
+        <div class="card-header">
+          <h3 class="card-subtitle">添加新标签</h3>
+        </div>
 
-        <input
-          type="text"
-          [(ngModel)]="newTagNameValue"
-          placeholder="标签名称"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
-        />
+        <div class="input-group">
+          <label class="input-label">标签名称</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              [(ngModel)]="newTagNameValue"
+              placeholder="例如：川菜、粤菜"
+              class="text-input"
+            />
+          </div>
+        </div>
 
-        <input
-          type="text"
-          [(ngModel)]="newTagItemsValue"
-          placeholder="食物列表（用逗号分隔）"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
-        />
+        <div class="input-group">
+          <label class="input-label">食物列表</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              [(ngModel)]="newTagItemsValue"
+              placeholder="用逗号分隔，如：宫保鸡丁、回锅肉"
+              class="text-input"
+            />
+          </div>
+        </div>
 
-        <div class="flex gap-4 mb-3">
-          <select
-            [(ngModel)]="selectedCategoryValue"
-            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="breakfast">早餐</option>
-            <option value="lunch">午餐</option>
-            <option value="dinner">晚餐</option>
-            <option value="snack">夜宵</option>
-          </select>
+        <div class="options-row">
+          <div class="option-item">
+            <label class="input-label">餐食类型</label>
+            <div class="select-wrapper">
+              <select
+                [(ngModel)]="selectedCategoryValue"
+                class="select-input"
+              >
+                <option value="breakfast">🌅 早餐</option>
+                <option value="lunch">☀️ 午餐</option>
+                <option value="dinner">🌙 晚餐</option>
+                <option value="snack">🍜 夜宵</option>
+              </select>
+            </div>
+          </div>
 
-          <label class="flex items-center gap-2">
+          <label class="checkbox-wrapper">
             <input
               type="checkbox"
               [(ngModel)]="isHealthyValue"
-              class="w-4 h-4 text-blue-500 rounded"
+              class="checkbox-input"
             />
-            <span class="text-sm text-gray-600">健康</span>
+            <span class="checkbox-custom">
+              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </span>
+            <span class="checkbox-text">健康偏好</span>
           </label>
         </div>
 
         <button
           (click)="addTag()"
-          class="w-full py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors"
+          class="secondary-btn"
         >
-          添加标签
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>添加标签</span>
         </button>
       </div>
 
-      <!-- 标签列表 -->
-      <div class="space-y-2">
-        @for (tag of tags(); track tag.id) {
-          <div class="bg-white rounded-xl shadow-sm p-4 flex justify-between items-start">
-            <div>
-              <h4 class="font-medium text-gray-800">{{ tag.name }}</h4>
-              <p class="text-xs text-gray-500">
-                {{ getMealTypeName(tag.category) }} · {{ tag.isHealthy ? '健康' : '放纵' }}
-              </p>
-              <p class="text-sm text-gray-600 mt-1">{{ tag.items.join('、') }}</p>
+      <!-- 已有标签列表 -->
+      @if (tags().length > 0) {
+        <div class="tags-list">
+          @for (tag of tags(); track tag.id) {
+            <div class="tag-item">
+              <div class="tag-content">
+                <div class="tag-header">
+                  <span class="tag-name">{{ tag.name }}</span>
+                  <span class="tag-badges">
+                    <span class="tag-badge type">{{ getMealTypeName(tag.category) }}</span>
+                    <span class="tag-badge health" [class.active]="tag.isHealthy">健康</span>
+                  </span>
+                </div>
+                <p class="tag-items">{{ tag.items.join('、') }}</p>
+              </div>
+              <button
+                (click)="deleteTag(tag.id)"
+                class="delete-btn"
+                aria-label="删除标签"
+              >
+                <svg class="delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  <line x1="10" y1="11" x2="10" y2="17"/>
+                  <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+              </button>
             </div>
-            <button
-              (click)="deleteTag(tag.id)"
-              class="text-red-500 hover:text-red-700 text-sm"
-            >
-              删除
-            </button>
-          </div>
-        }
-      </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-tags">
+          <span class="empty-icon">📝</span>
+          <p class="empty-text">还没有添加任何标签</p>
+        </div>
+      }
     </section>
 
     <!-- 数据管理 -->
-    <section>
-      <h2 class="text-lg font-semibold text-gray-800 mb-4">数据管理</h2>
-      <button
-        (click)="clearAllData()"
-        class="w-full py-3 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors"
-      >
-        清除所有数据
-      </button>
+    <section class="settings-section">
+      <div class="section-header">
+        <div class="section-icon-wrapper danger">
+          <span class="section-icon">🗑️</span>
+        </div>
+        <div class="section-text">
+          <h2 class="section-title">数据管理</h2>
+          <p class="section-desc">清除所有本地存储的数据</p>
+        </div>
+      </div>
+      <div class="settings-card danger-zone">
+        <button
+          (click)="clearAllData()"
+          class="danger-btn"
+        >
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+          <span>清除所有数据</span>
+        </button>
+        <p class="danger-hint">此操作不可撤销，将删除所有历史记录和自定义标签</p>
+      </div>
     </section>
+
+    <!-- 底部信息 -->
+    <footer class="app-footer">
+      <div class="footer-brand">
+        <span class="footer-logo">🍽️</span>
+        <span class="footer-name">Chileme</span>
+      </div>
+      <p class="footer-version">v1.0.0</p>
+      <p class="footer-tagline">极简美食推荐，让选择更简单</p>
+    </footer>
   </main>
 </div>

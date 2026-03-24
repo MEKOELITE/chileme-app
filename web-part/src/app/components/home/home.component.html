@@ -1,6 +1,6 @@
-<!-- 极简主义美食推荐界面 - App Store 级别设计 -->
+<!-- 极简主义美食推荐界面 - 全新精致设计 -->
 <div class="app-container" [class.dark]="isDarkMode()">
-  <!-- 1️⃣ 顶部状态栏 (沉浸式设计) -->
+  <!-- 顶部状态栏 -->
   <header class="app-header">
     <div class="header-content">
       <div class="logo-area">
@@ -24,13 +24,17 @@
     </div>
   </header>
 
-  <!-- 2️⃣ 内容区域 -->
+  <!-- 内容区域 -->
   <main class="main-content">
-    <!-- 2.1 输入条件区 -->
-    <section class="input-section">
-      <div class="section-label">今天想吃什么？</div>
+    <!-- 标题区域 -->
+    <section class="title-section">
+      <h1 class="main-title">今天吃什么？</h1>
+      <p class="subtitle">让 AI 帮你做出美味的选择</p>
+    </section>
 
-      <!-- 餐食类型选择 - Segmented Control -->
+    <!-- 输入条件区 -->
+    <section class="input-section">
+      <!-- 餐食类型选择 -->
       <div class="meal-selector">
         @for (type of mealTypes; track type.value) {
           <button
@@ -46,11 +50,15 @@
 
       <!-- 健康偏好开关 -->
       <div class="preference-row">
-        <div class="preference-label">
-          <svg class="pref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        <div class="preference-info">
+          <svg class="pref-icon leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c1.5 0 3-.5 4-1.5"/>
+            <path d="M12 2c3 2.5 4.5 5.5 4.5 9s-1.5 6.5-4.5 9"/>
+            <path d="M12 2c-3 2.5-4.5 5.5-4.5 9s1.5 6.5 4.5 9"/>
+            <path d="M2 12h10"/>
+            <path d="M17 7l5-5 5 5"/>
           </svg>
-          <span>健康偏好</span>
+          <span>健康优先</span>
         </div>
         <button
           class="toggle-switch"
@@ -64,10 +72,16 @@
       </div>
     </section>
 
-    <!-- 2.2 推荐结果区 (视觉核心) -->
+    <!-- 推荐结果区 -->
     <section class="result-section">
       <!-- 推荐卡片 -->
       <div class="result-card" [class.entering]="isCardEntering()" [class.exiting]="isCardExiting()">
+        <!-- 背景装饰 -->
+        <div class="card-decoration">
+          <div class="decoration-circle circle-1"></div>
+          <div class="decoration-circle circle-2"></div>
+        </div>
+
         @if (currentRecommendation()) {
           <!-- 食物图标 -->
           <div class="food-emoji-container">
@@ -112,17 +126,13 @@
 
       <!-- 切换指示器 -->
       <div class="switch-indicator" [class.visible]="recommendationCount() > 1">
-        <span class="indicator-dot active"></span>
-        @if (recommendationCount() > 1) {
-          <span class="indicator-dot"></span>
-        }
-        @if (recommendationCount() > 2) {
-          <span class="indicator-dot"></span>
+        @for (i of [0, 1, 2]; track i) {
+          <span class="indicator-dot" [class.active]="recommendationCount() > i"></span>
         }
       </div>
     </section>
 
-    <!-- 3️⃣ 操作区 (底部) -->
+    <!-- 操作区 -->
     <section class="action-section">
       <!-- 主按钮：AI 推荐 -->
       <button
@@ -144,13 +154,12 @@
             <path d="M2 17l10 5 10-5"/>
             <path d="M2 12l10 5 10-5"/>
           </svg>
-          <span class="btn-text">AI 推荐</span>
+          <span class="btn-text">AI 智能推荐</span>
         }
       </button>
 
       <!-- 次要按钮组 -->
       <div class="secondary-btn-row">
-        <!-- 随机推荐 -->
         <button
           class="secondary-btn"
           [disabled]="isLoading() || !hasRecommendation()"
@@ -161,10 +170,9 @@
             <polyline points="1 20 1 14 7 14"/>
             <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
           </svg>
-          <span>随机</span>
+          <span>换一批</span>
         </button>
 
-        <!-- 最终确认按钮 -->
         <button
           class="confirm-btn"
           [class.ready]="hasRecommendation()"
@@ -174,7 +182,7 @@
           <svg class="confirm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
-          <span class="confirm-text">就吃这个了</span>
+          <span>就吃这个</span>
         </button>
       </div>
     </section>

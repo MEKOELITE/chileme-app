@@ -13,6 +13,7 @@ export class StorageService {
     API_KEY: 'chileme_api_key',
     FOOD_HISTORY: 'chileme_food_history',
     USER_TAGS: 'chileme_user_tags',
+    DARK_MODE: 'chileme_dark_mode',
   };
 
   // 旧版存储 key（用于数据迁移）
@@ -40,6 +41,7 @@ export class StorageService {
   readonly apiKey = signal<string>(this.getApiKey());
   readonly foodHistory = signal<FoodHistory[]>(this.getFoodHistory());
   readonly userTags = signal<FoodTag[]>(this.getUserTags());
+  readonly isDarkMode = signal<boolean>(this.getDarkMode());
 
   constructor() {
     this.migrateLegacyData();
@@ -114,6 +116,26 @@ export class StorageService {
 
   hasApiKey(): boolean {
     return this.getApiKey().trim().length > 0;
+  }
+
+  // ============ 深色模式 ============
+
+  getDarkMode(): boolean {
+    const stored = localStorage.getItem(this.STORAGE_KEYS.DARK_MODE);
+    if (stored !== null) {
+      return stored === 'true';
+    }
+    // 默认跟随系统设置
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
+  setDarkMode(enabled: boolean): void {
+    localStorage.setItem(this.STORAGE_KEYS.DARK_MODE, String(enabled));
+    this.isDarkMode.set(enabled);
+  }
+
+  toggleDarkMode(): void {
+    this.setDarkMode(!this.isDarkMode());
   }
 
   // ============ 食物标签 ============

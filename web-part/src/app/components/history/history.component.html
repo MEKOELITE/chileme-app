@@ -1,11 +1,11 @@
-<!-- 历史记录页面 -->
-<div class="app-container">
+<!-- 历史记录页面 - 精致设计 -->
+<div class="app-container" [class.dark]="isDarkMode()">
   <!-- 顶部导航 -->
   <header class="app-header">
     <div class="header-content">
       <a routerLink="/" class="back-btn">
         <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <polyline points="15,18 9,12 15,6"/>
+          <path d="M19 12H5M12 19l-7-7 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <span class="header-title">历史记录</span>
       </a>

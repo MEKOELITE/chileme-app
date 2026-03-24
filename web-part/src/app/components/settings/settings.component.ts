@@ -20,6 +20,7 @@ export class SettingsComponent implements OnInit {
   tags = signal<FoodTag[]>([]);
   isValidating = signal<boolean>(false);
   validationResult = signal<{ valid: boolean; message: string } | null>(null);
+  isDarkMode = this.storageService.isDarkMode;
 
   // ngModel 双向绑定
   apiKeyValue = '';
@@ -102,5 +103,12 @@ export class SettingsComponent implements OnInit {
       'snack': '夜宵'
     };
     return names[type];
+  }
+
+  /**
+   * 切换深色模式
+   */
+  toggleDarkMode(): void {
+    this.storageService.toggleDarkMode();
   }
 }

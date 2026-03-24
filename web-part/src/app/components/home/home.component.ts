@@ -121,8 +121,8 @@ export class HomeComponent implements OnInit {
   // 是否有推荐
   hasRecommendation = computed(() => this.currentRecommendation() !== null);
 
-  // 暗色模式（可扩展）
-  isDarkMode = signal(false);
+  // 暗色模式
+  isDarkMode = this.storageService.isDarkMode;
 
   constructor() {
     // 初始化时随机选择一个

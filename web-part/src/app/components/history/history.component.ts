@@ -23,6 +23,9 @@ interface MealTypeConfig {
 export class HistoryComponent implements OnInit {
   private storageService = inject(StorageService);
 
+  // 深色模式
+  isDarkMode = this.storageService.isDarkMode;
+
   // 餐食类型配置
   mealTypes: MealTypeConfig[] = [
     { value: 'breakfast', label: '早餐', emoji: '🌅' },
